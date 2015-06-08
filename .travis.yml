@@ -1,4 +1,4 @@
 os:
    - linux
 language: python
-script: nosetests srcs/tests/
+script: python flaskr/flaskr_tests.py
