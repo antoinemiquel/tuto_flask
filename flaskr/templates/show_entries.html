@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 {% if session.logged_in %}
+<a href="javascript:affiche_nb_post();">Nombre de posts</a>
 <form action="{{ url_for('add_entry') }}" method=post class=add-entry>
     <dl>
         <dt>Title:
@@ -10,6 +11,16 @@
         <dd><input type=submit value=Share>
     </dl>
 </form>
+<script>
+    function affiche_nb_post() {
+        $.post('/post_nb'
+        ).done(function(result) {
+            $( "#dialog_nb_post").html(result['nb'])
+            $( "#dialog_nb_post" ).dialog();
+        });
+    }
+</script>
+<div id="dialog_nb_post" title="Nombre de posts"></div>
 {% endif %}
 <ul class=entries>
     {% for entry in entries %}

@@ -50,5 +50,14 @@ class FlaskrTestCase(unittest.TestCase):
         assert '&lt;Hello&gt;' in rv.data
         assert '<strong>HTML</strong> allowed here' in rv.data
 
+    def test_nb_posts(self):
+        self.login('admin', 'default')
+        self.app.post('/add', data=dict(
+            title='<Hello>',
+            text='<strong>HTML</strong> allowed here'
+        ), follow_redirects=True)
+        result = self.app.post('/post_nb')
+        assert "1" in result.data
+
 if __name__ == '__main__':
     unittest.main()

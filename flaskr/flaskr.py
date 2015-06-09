@@ -3,7 +3,7 @@ __author__ = 'antoine'
 # all the imports
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, \
-    abort, render_template, flash
+    abort, render_template, flash, jsonify
 from contextlib import closing
 
 # configuration
@@ -73,6 +73,15 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
+
+@app.route('/post_nb', methods=['POST'])
+def post_nb():
+    if not session.get('logged_in'):
+        abort(401)
+    cur = g.db.execute('select count(*) from entries')
+    for row in cur.fetchall():
+        nb_entries = row[0]
+    return jsonify({'nb': nb_entries})
 
 if __name__ == '__main__':
     app.run()
